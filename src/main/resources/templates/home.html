@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>home</title>
+</head>
+<body>
+<a href="/logout">Logout</a><br><br>
+
+<form action="add-patient" method="post">
+    <input type="text" placeholder="patient name" name="patientName"/>
+    <input type="number" placeholder="Calories" name="beercalories"/>
+    <button type="submit">Submit</button>
+</form>
+
+{{#doctors}}{{name}}{{/doctors}}
+
+{{#patients}}{{name}}{{/patients}}
+
+{{#appointments}}{{date}}{{/appointments}}
+</body>
+</html>
