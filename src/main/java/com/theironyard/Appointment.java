@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
  * Created by holdenhughes on 11/14/15.
  */
 @Entity
+@Table(name = "appointmentsTable")
 public class Appointment {
     @Id
     @GeneratedValue

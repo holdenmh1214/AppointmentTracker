@@ -7,6 +7,7 @@ import java.util.List;
  * Created by holdenhughes on 11/14/15.
  */
 @Entity
+@Table(name = "patients")
 public class Patient {
     @Id
     @GeneratedValue

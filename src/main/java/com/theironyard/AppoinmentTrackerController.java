@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDateTime;
+import java.time.Month;
 
 /**
  * Created by holdenhughes on 11/14/15.
@@ -29,7 +30,7 @@ public class AppoinmentTrackerController {
     @PostConstruct
     public void init() throws InvalidKeySpecException, NoSuchAlgorithmException {
         User user = users.findOneByName("Holden");
-        if (user == null){
+        if (user == null) {
             user = new User();
             user.name = "Holden";
             user.password = PasswordHash.createHash("h");
@@ -52,11 +53,12 @@ public class AppoinmentTrackerController {
             patients.save(patient);
         }
         Appointment appointmentTest = new Appointment();
-            appointmentTest.date = LocalDateTime.now();
-            appointmentTest.doctor=doctor;
-            appointmentTest.patient=patient;
-            appointments.save(appointmentTest);
-        }
+        appointmentTest.date = LocalDateTime.of(2015,12,25,00,00);
+        appointmentTest.doctor=doctor;
+        appointmentTest.patient=patient;
+        appointments.save(appointmentTest);
+
+    }
     @RequestMapping("/")
     public String home(Model model, HttpSession session){
 
@@ -64,6 +66,7 @@ public class AppoinmentTrackerController {
         if (username == null){
             return "login";
         }
+
         return "home";
     }
 
@@ -92,21 +95,47 @@ public class AppoinmentTrackerController {
         return "redirect:/";
     }
 
-    @RequestMapping("/add-patient")
-    public String addPatient(String patientName, int patientDOBMonth,int patientDOBDay,int patientDOBYear,
-                             HttpSession session) throws Exception {
+    @RequestMapping("/patients")
+    public String patients(Model model, HttpSession session) throws Exception {
         if (session.getAttribute("username")==null){
-            throw new Exception("Not logged-in");
+            throw new Exception("not logged in");
         }
-        String username = (String) session.getAttribute("username");
-        User user = users.findOneByName(username);
-        Patient patient = new Patient();
-        patient.name = patientName;
-        patient.dobMonth = patientDOBMonth;
-        patient.dobDay = patientDOBDay;
-        patient.dobYear = patientDOBYear;
-        patients.save(patient);
-        return "redirect:/";
+        model.addAttribute("patients", patients.findAll());
+        return "patients";
     }
 
+
+    @RequestMapping("/add-patient")
+    public String addPatient(String patientName, Integer patientDOBMonth,Integer patientDOBDay,Integer patientDOBYear,
+                             HttpSession session) throws Exception {
+        if (session.getAttribute("username")==null){
+            throw new Exception("not logged in");
+        }
+            String username = (String) session.getAttribute("username");
+            User user = users.findOneByName(username);
+            Patient patient = new Patient();
+            patient.name = patientName;
+            patient.dobMonth = patientDOBMonth;
+            patient.dobDay = patientDOBDay;
+            patient.dobYear = patientDOBYear;
+        if (patientName==null){
+            throw new Exception("Invalid patient name");
+        }
+        else if(patientDOBDay==null || patientDOBMonth==null || patientDOBYear==null){
+            throw new Exception("Invalid patient name");
+        }
+        else {
+            patients.save(patient);
+        }
+        return "redirect:/patients";
+    }
+
+    @RequestMapping("/doctors")
+    public String doctors(Model model, HttpSession session) throws Exception {
+        if (session.getAttribute("username")==null){
+            throw new Exception("not logged in");
+        }
+        model.addAttribute("doctors", doctors.findAll());
+        return "doctors";
+    }
 }

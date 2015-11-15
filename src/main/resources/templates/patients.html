@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>patients</title>
+</head>
+<body>
+<a href="/">Home</a><br>
+<a href="/doctors">Doctors</a><br>
+
+<form action="add-patient" method="post">
+    <input type="text" placeholder="patient name" name="patientName"/><br>
+    <input type="number" placeholder="Month" name="patientDOBMonth"/>|
+    <input type="number" placeholder="Day" name="patientDOBDay"/>|
+    <input type="number" placeholder="Year" name="patientDOBYear"/>|
+    <button type="submit">Submit</button>
+</form>
+<br>
+Patients:<br>
+{{#patients}}
+{{name}} DOB:{{dobMonth}}-{{dobDay}}-{{dobYear}}<br>
+{{/patients}}
+</body>
+</html>
