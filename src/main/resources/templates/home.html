@@ -16,7 +16,12 @@ Appointments:
 {{#appointments}}
 {{date}}<br> Patient: {{#patient}}{{name}}{{/patient}}<br>
 Purpose:{{#patient}} {{purpose}}{{/patient}} <br>
-Doctor: {{#doctor}}{{name}}{{/doctor}} {{#doctor}}{{phone}}{{/doctor}} <br><br>
+Doctor: {{#doctor}}{{name}}{{/doctor}} {{#doctor}}{{phone}}{{/doctor}}
+<form action="delete-appointment" method="post" style="display:inline;">
+    <input type="hidden" value="{{id}}" name="id"/>
+    <button type="submit">Delete</button>
+</form>
+<br><br>
 {{/appointments}}
 </body>
 </html>

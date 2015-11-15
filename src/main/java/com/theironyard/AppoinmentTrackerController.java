@@ -161,5 +161,15 @@ public class AppoinmentTrackerController {
         return "redirect:/doctors";
     }
 
+    @RequestMapping("/delete-appointment")
+    public String editBeer (int id, HttpSession session) throws Exception {
+        if (session.getAttribute("username")==null){
+            throw new Exception("Not logged-in");
+        }
+        Appointment appointment = appointments.findOne(id);
+        appointments.delete(id);
+        return "redirect:/";
+    }
+
 
 }
