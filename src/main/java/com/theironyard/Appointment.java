@@ -2,6 +2,7 @@ package com.theironyard;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Created by holdenhughes on 11/14/15.
@@ -15,7 +16,9 @@ public class Appointment {
 
     LocalDateTime date;
 
-    @ManyToOne
+    String purpose;
+
+   @ManyToOne
     Patient patient;
     @ManyToOne
     Doctor doctor;

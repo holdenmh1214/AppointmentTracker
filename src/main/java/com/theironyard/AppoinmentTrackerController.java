@@ -56,6 +56,7 @@ public class AppoinmentTrackerController {
         appointmentTest.date = LocalDateTime.of(2015,12,25,00,00);
         appointmentTest.doctor=doctor;
         appointmentTest.patient=patient;
+        appointmentTest.purpose="Stomach pains";
         appointments.save(appointmentTest);
 
     }
@@ -66,6 +67,8 @@ public class AppoinmentTrackerController {
         if (username == null){
             return "login";
         }
+
+        model.addAttribute("appointments", appointments.findAll());
 
         return "home";
     }
@@ -111,8 +114,6 @@ public class AppoinmentTrackerController {
         if (session.getAttribute("username")==null){
             throw new Exception("not logged in");
         }
-            String username = (String) session.getAttribute("username");
-            User user = users.findOneByName(username);
             Patient patient = new Patient();
             patient.name = patientName;
             patient.dobMonth = patientDOBMonth;
@@ -138,4 +139,27 @@ public class AppoinmentTrackerController {
         model.addAttribute("doctors", doctors.findAll());
         return "doctors";
     }
+
+    @RequestMapping("/add-doctor")
+    public String addDoctor(String doctorName, String doctorPhone,
+                             HttpSession session) throws Exception {
+        if (session.getAttribute("username")==null){
+            throw new Exception("not logged in");
+        }
+        Doctor doctor = new Doctor();
+        doctor.name = doctorName;
+        doctor.phone = doctorPhone;
+        if (doctorName==null){
+            throw new Exception("Invalid doctor name");
+        }
+        else if(doctorName==null){
+            throw new Exception("Invalid phone number");
+        }
+        else {
+            doctors.save(doctor);
+        }
+        return "redirect:/doctors";
+    }
+
+
 }

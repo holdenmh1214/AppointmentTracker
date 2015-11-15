@@ -7,15 +7,16 @@
 <body>
 <a href="/logout">Logout</a>
 <br><br>
-<a href="/patients">Patients</a>
-<a href="/doctors">Doctors</a>
+<a href="/patients">Patients</a><br>
+<a href="/doctors">Doctors</a><br>
 
 
-
-
-{{#doctors}}{{name}}{{/doctors}}
-
-
-{{#appointments}}{{date}}{{/appointments}}
+Appointments:
+<br><br>
+{{#appointments}}
+{{date}}<br> Patient: {{#patient}}{{name}}{{/patient}}<br>
+Purpose:{{#patient}} {{purpose}}{{/patient}} <br>
+Doctor: {{#doctor}}{{name}}{{/doctor}} {{#doctor}}{{phone}}{{/doctor}} <br><br>
+{{/appointments}}
 </body>
 </html>

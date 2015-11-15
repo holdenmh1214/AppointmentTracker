@@ -16,6 +16,7 @@ public class Doctor {
     String name;
     String phone;
 
+
     @OneToMany(mappedBy = "doctor")
     List<Appointment> appointments;
 }

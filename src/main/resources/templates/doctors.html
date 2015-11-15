@@ -7,11 +7,16 @@
 <body>
 <a href="/">Home</a><br>
 <a href="/patients">Patients</a><br>
-
-Doctors:<br>
+<br><br><form action="add-doctor" method="post">
+    <input type="text" placeholder="doctor name" name="doctorName"/><br>
+    <input type="text" placeholder="phone number" name="doctorPhone"/>
+    <button type="submit">Submit</button>
+</form>
+<br><br>
+Doctors:<br><br>
 {{#doctors}}
-Dr.{{name}}<br>
-Phone:{{phone}}<br>
+Dr. {{name}}<br>
+Phone: {{phone}}<br>
 {{/doctors}}
 </body>
 </html>
