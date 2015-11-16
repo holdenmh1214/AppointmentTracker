@@ -1,9 +1,7 @@
 package com.theironyard;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by holdenhughes on 11/14/15.
@@ -17,4 +15,7 @@ public class User {
 
     String name;
     String password;
+
+    @OneToMany(mappedBy = "user") //this is the name of the field in the beer class
+            List<Appointment> appointments;
 }

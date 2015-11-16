@@ -5,22 +5,81 @@
     <title>home</title>
 </head>
 <body>
+{{#username}}
+Hello {{#user}}{{name}}{{/user}}
+{{/username}}
+{{^username}}
+<a href="/login">Login</a>
+{{/username}}
+{{#username}}
 <a href="/logout">Logout</a>
+{{/username}}
 <br><br>
-<a href="/patients">Patients</a><br>
-<a href="/doctors">Doctors</a><br>
 
-
+<br>
+Add Appointment:
+<form action="add-appointment" method="post">
+    <input type="text" placeholder="Patient Name" name="patientName"/>
+    <br>
+    <input type="text" placeholder="Doctor Name" name="doctorName"/>
+    <br>
+    <input type="text" placeholder="Purpose" name="purpose"/>
+    <br>
+    <select name="dateMonth">
+        <option value="January">January</option>
+        <option value="February">February</option>
+        <option value="March">March</option>
+        <option value="April">April</option>
+        <option value="May">May</option>
+        <option value="June">June</option>
+        <option value="July">July</option>
+        <option value="August">August</option>
+        <option value="September">September</option>
+        <option value="October">October</option>
+        <option value="November">November</option>
+        <option value="December">December</option>
+    </select>
+    <input type="text" placeholder="Day" name="dateDay"/>,
+    <select name="dateYear">
+        <option value="2015">2015</option>
+        <option value="2016">2016</option>
+        <option value="2017">2017</option>
+        <option value="2018">2018</option>
+        <option value="2019">2019</option>
+        <option value="2020">2020</option>
+        <option value="July">July</option>
+    </select>
+     <select name="dateHour">
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+         <option value="4">4</option>
+     </select>:
+    <select name="dateMinute">
+        <option value="00">00</option>
+        <option value="15">15</option>
+        <option value="30">30</option>
+        <option value="45">45</option>
+    </select>
+    <br>
+    <button type="submit">Submit</button>
+</form>
+<br><br>
 Appointments:
 <br><br>
 {{#appointments}}
-{{date}}<br> Patient: {{#patient}}{{name}}{{/patient}}<br>
-Purpose:{{#patient}} {{purpose}}{{/patient}} <br>
-Doctor: {{#doctor}}{{name}}{{/doctor}} {{#doctor}}{{phone}}{{/doctor}}
-<form action="delete-appointment" method="post" style="display:inline;">
+{{dateMonth}} {{dateDay}}, {{dateYear}} @{{dateHour}}:{{dateMinute}}<br> Patient: {{patientName}}<br>
+Purpose: {{purpose}} <br>
+Doctor: {{doctorName}}<br>
+{{#username}}<form action="delete-appointment" method="post" style="display:inline;">
     <input type="hidden" value="{{id}}" name="id"/>
     <button type="submit">Delete</button>
 </form>
+{{/username}}
 <br><br>
 {{/appointments}}
 </body>

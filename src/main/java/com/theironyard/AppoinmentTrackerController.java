@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.PostConstruct;
+import javax.print.Doc;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.NoSuchAlgorithmException;
@@ -22,61 +23,31 @@ public class AppoinmentTrackerController {
     UserRepository users;
     @Autowired
     AppointmentRepository appointments;
-    @Autowired
-    DoctorRepository doctors;
-    @Autowired
-    PatientRepository patients;
 
     @PostConstruct
     public void init() throws InvalidKeySpecException, NoSuchAlgorithmException {
-        User user = users.findOneByName("Holden");
-        if (user == null) {
-            user = new User();
-            user.name = "Holden";
-            user.password = PasswordHash.createHash("h");
-            users.save(user);
-        }
-        Doctor doctor = doctors.findOneByName("House");
-        if (doctor == null) {
-            doctor = new Doctor();
-            doctor.name = "House";
-            doctor.phone = "555-555-5555";
-            doctors.save(doctor);
-        }
-        Patient patient = patients.findOneByName("James Monroe");
-        if (patient == null) {
-            patient = new Patient();
-            patient.name = "James Monroe";
-            patient.dobMonth = 12;
-            patient.dobDay = 14;
-            patient.dobYear = 1989;
-            patients.save(patient);
-        }
         Appointment appointmentTest = new Appointment();
-        appointmentTest.date = LocalDateTime.of(2015,12,25,00,00);
-        appointmentTest.doctor=doctor;
-        appointmentTest.patient=patient;
+        appointmentTest.dateMonth = "December";
+        appointmentTest.dateDay = "25";
+        appointmentTest.dateYear = "2015";
+        appointmentTest.dateHour = "12";
+        appointmentTest.dateMinute = "30";
+        appointmentTest.doctorName="Who";
+        appointmentTest.patientName="Holden Hughes";
         appointmentTest.purpose="Stomach pains";
         appointments.save(appointmentTest);
-
     }
+
     @RequestMapping("/")
     public String home(Model model, HttpSession session){
-
         String username = (String) session.getAttribute("username");
-        if (username == null){
-            return "login";
-        }
-
         model.addAttribute("appointments", appointments.findAll());
-
         return "home";
     }
 
     @RequestMapping("/login")
     public String login(String username, String password, HttpSession session) throws Exception {
         session.setAttribute("username", username);
-
         User user = users.findOneByName(username);
         if (user == null){
             user = new User();
@@ -98,71 +69,76 @@ public class AppoinmentTrackerController {
         return "redirect:/";
     }
 
-    @RequestMapping("/patients")
-    public String patients(Model model, HttpSession session) throws Exception {
+    @RequestMapping("/add-appointment")
+    public String addAppointment(String dateMonth,
+                                 String dateDay,
+                                 String dateYear,
+                                 String dateHour,
+                                 String dateMinute,
+                                 String purpose,
+                                 String doctorName,
+                                 String patientName,
+                            HttpSession session) throws Exception {
+
         if (session.getAttribute("username")==null){
             throw new Exception("not logged in");
         }
-        model.addAttribute("patients", patients.findAll());
-        return "patients";
-    }
-
-
-    @RequestMapping("/add-patient")
-    public String addPatient(String patientName, Integer patientDOBMonth,Integer patientDOBDay,Integer patientDOBYear,
-                             HttpSession session) throws Exception {
-        if (session.getAttribute("username")==null){
-            throw new Exception("not logged in");
-        }
-            Patient patient = new Patient();
-            patient.name = patientName;
-            patient.dobMonth = patientDOBMonth;
-            patient.dobDay = patientDOBDay;
-            patient.dobYear = patientDOBYear;
-        if (patientName==null){
-            throw new Exception("Invalid patient name");
-        }
-        else if(patientDOBDay==null || patientDOBMonth==null || patientDOBYear==null){
-            throw new Exception("Invalid patient name");
+        String username = (String) session.getAttribute("username");
+        User user = users.findOneByName(username);
+        Appointment appointment = new Appointment();
+        appointment.patientName= patientName;
+        appointment.doctorName = doctorName;
+        appointment.purpose = purpose;
+        appointment.dateMonth = dateMonth;
+        appointment.dateDay = dateDay;
+        appointment.dateYear = dateYear;
+        appointment.dateHour = dateHour;
+        appointment.dateMinute = dateMinute;
+        if (purpose==null){
+            throw new Exception("Must submit purpose");
+        } else if(doctorName == null){
+            throw new Exception("Must submit doctor name");
+        } else if(patientName == null){
+            throw new Exception("Must submit patient name");
         }
         else {
-            patients.save(patient);
+            appointments.save(appointment);
         }
-        return "redirect:/patients";
+        return "redirect:/";
     }
 
-    @RequestMapping("/doctors")
-    public String doctors(Model model, HttpSession session) throws Exception {
+    @RequestMapping("/edit-appointment")
+    public String editAppointment(int id,
+                                  String dateMonth,
+                                 String dateDay,
+                                 String dateYear,
+                                 String dateHour,
+                                 String dateMinute,
+                                 String purpose,
+                                 String doctorName,
+                                 String patientName,
+                                 HttpSession session) throws Exception {
+
         if (session.getAttribute("username")==null){
             throw new Exception("not logged in");
         }
-        model.addAttribute("doctors", doctors.findAll());
-        return "doctors";
+        Appointment appointment = appointments.findOne(id);
+        appointment.patientName= patientName;
+        appointment.doctorName = doctorName;
+        appointment.purpose = purpose;
+        appointment.dateMonth = dateMonth;
+        appointment.dateDay = dateDay;
+        appointment.dateYear = dateYear;
+        appointment.dateHour = dateHour;
+        appointment.dateMinute = dateMinute;
+        appointments.save(appointment);
+
+        return "redirect:/";
     }
 
-    @RequestMapping("/add-doctor")
-    public String addDoctor(String doctorName, String doctorPhone,
-                             HttpSession session) throws Exception {
-        if (session.getAttribute("username")==null){
-            throw new Exception("not logged in");
-        }
-        Doctor doctor = new Doctor();
-        doctor.name = doctorName;
-        doctor.phone = doctorPhone;
-        if (doctorName==null){
-            throw new Exception("Invalid doctor name");
-        }
-        else if(doctorName==null){
-            throw new Exception("Invalid phone number");
-        }
-        else {
-            doctors.save(doctor);
-        }
-        return "redirect:/doctors";
-    }
 
     @RequestMapping("/delete-appointment")
-    public String editBeer (int id, HttpSession session) throws Exception {
+    public String deleteAppointment (int id, HttpSession session) throws Exception {
         if (session.getAttribute("username")==null){
             throw new Exception("Not logged-in");
         }

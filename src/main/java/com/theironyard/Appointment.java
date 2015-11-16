@@ -14,12 +14,20 @@ public class Appointment {
     @GeneratedValue
     Integer id;
 
-    LocalDateTime date;
+    String dateMonth;
+    String dateDay;
+    String dateYear;
+    String dateHour;
+    String dateMinute;
 
     String purpose;
+    String doctorName;
+    String patientName;
 
    @ManyToOne
     Patient patient;
     @ManyToOne
     Doctor doctor;
+    @ManyToOne
+    User user;
 }
