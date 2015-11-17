@@ -2,17 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>home</title>
+    <title></title>
 </head>
 <body>
-{{^username}}
-<a href="logout">Logout</a>
-{{/username}}
-<br><br>
-
-<br>
-Add Appointment:
-<form action="add-appointment" method="post">
+<form action="edit-appointment?id={{id}}" method="post">
     <input type="text" placeholder="Patient Name" name="patientName"/>
     <br>
     <input type="text" placeholder="Doctor Name" name="doctorName"/>
@@ -43,7 +36,7 @@ Add Appointment:
         <option value="2020">2020</option>
         <option value="July">July</option>
     </select>
-     <select name="dateHour">
+    <select name="dateHour">
         <option value="9">9</option>
         <option value="10">10</option>
         <option value="11">11</option>
@@ -51,8 +44,8 @@ Add Appointment:
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
-         <option value="4">4</option>
-     </select>:
+        <option value="4">4</option>
+    </select>:
     <select name="dateMinute">
         <option value="00">00</option>
         <option value="15">15</option>
@@ -62,25 +55,5 @@ Add Appointment:
     <br>
     <button type="submit">Submit</button>
 </form>
-<br><br>
-Appointments:
-<br><br>
-{{#appointments}}
-{{dateMonth}} {{dateDay}}, {{dateYear}} @{{dateHour}}:{{dateMinute}}<br> Patient: {{patientName}}<br>
-Purpose: {{purpose}} <br>
-Doctor: {{doctorName}}<br>
-<form action="delete-appointment" method="post" style="display:inline;">
-    <input type="hidden" value="{{id}}" name="id"/>
-    <button type="submit">Delete</button>
-</form> <form action="editPage" method="post" style="display:inline;">
-    <input type="hidden" value="{{id}}" name="id"/>
-    <button type="submit">Edit</button>
-</form>
-<br><br>
-{{/appointments}}
-<br>
-{{#showNext}}
-<a href="/?page={{nextPage}}{{#appointment}}&id={{.}}{{/appointment}}">Next</a>
-{{/showNext}}
 </body>
 </html>
